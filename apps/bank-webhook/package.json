@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild --platform=node --bundle --sourcemap --outdir=dist src/index.ts",
-    "dev": "nodemon --exec \"npm run build && nodemon dist/index.js\" --watch src"
+    "build": "npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js",
+    "start": "node dist/index.js",
+    "dev": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",

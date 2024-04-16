@@ -15,15 +15,15 @@ interface paymentInformationInterface {
 }
 const paymentInfoSchema = z.object({
   token: z.string(),
-  userId: z.string(),
-  amount: z.number(),
+  user_identifier: z.string(),
+  amount: z.string(),
 });
 
 server.get("/", (req, res) => {
   res.send("WebHook is Working!");
 });
 server.post("/hdfcWebhook", async (req, res) => {
-  const { success } = paymentInfoSchema.safeParse(req);
+  const { success } = paymentInfoSchema.safeParse(req.body);
   if (!success) {
     return res.status(400).json({ message: "Bad Request" });
   }
