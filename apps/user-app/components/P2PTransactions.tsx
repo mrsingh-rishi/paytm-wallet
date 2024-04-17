@@ -1,13 +1,11 @@
 import { Card } from "@repo/ui/card";
 
-export const OnRampTransactions = ({
+export const P2PTransactions = ({
   transactions,
 }: {
   transactions: {
     time: Date;
     amount: number;
-    status: string;
-    provider: string;
     positive: boolean;
   }[];
 }) => {
