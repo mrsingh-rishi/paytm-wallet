@@ -55,11 +55,13 @@ export const authOptions = {
         } catch (e) {
           console.error(e);
         }
-
         return null;
       },
     }),
   ],
+  pages:{
+    signIn: "/auth/signin",
+  },
   secret: process.env.JWT_SECRET || "secret",
   callbacks: {
     // TODO: can u fix the type here? Using any is bad

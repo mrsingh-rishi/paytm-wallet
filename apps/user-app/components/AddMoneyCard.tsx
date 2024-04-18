@@ -29,6 +29,7 @@ export const AddMoney = () => {
     <Card title="Add Money">
       <div className="w-full">
         <TextInput
+        type="text"
           label={"Amount"}
           placeholder={"Amount"}
           onChange={(val) => {

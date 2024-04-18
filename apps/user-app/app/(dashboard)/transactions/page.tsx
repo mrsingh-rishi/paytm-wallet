@@ -2,8 +2,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/auth";
 import prisma from "@repo/db/client";
 import { P2PTransactions } from "../../../components/P2PTransactions";
+import { redirect } from "next/navigation";
 
 export default async function () {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    redirect("/auth/signin");
+  }
   const transactionsRecieved = await getP2PTransactionsRecieved();
   const transactionsSent = await getP2PTransactionsSent();
 

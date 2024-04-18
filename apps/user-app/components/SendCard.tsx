@@ -18,19 +18,25 @@ const SendCard = () => {
           <div className="min-w-72 pt-2">
             <TextInput
               placeholder={"7017025022"}
+              type="text"
               onChange={(value: string) => setNumber(value)}
               label={"Number"}
             />
 
             <TextInput
               placeholder={"69"}
+              type="text"
               onChange={(value: string) => setAmount(Number(value))}
               label={"Amount"}
             />
             <div className="pt-4 flex justify-center">
-              <Button onClick={async() => {
-                await p2pTransfer(number, amount * 100);
-              }}>Send</Button>
+              <Button
+                onClick={async () => {
+                  await p2pTransfer(number, amount * 100);
+                }}
+              >
+                Send
+              </Button>
             </div>
           </div>
         </Card>
