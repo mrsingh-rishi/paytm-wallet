@@ -6,7 +6,10 @@ import { useRouter } from "next/navigation";
 export function AppbarClient() {
   const session = useSession();
   const router = useRouter();
-
+  const pathname = window.location.pathname;
+  if (pathname === "/auth/signin") {
+    return <div></div>;
+  }
   return (
     <div>
       <Appbar
