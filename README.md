@@ -37,7 +37,7 @@ The Wallet App is a web application inspired by platforms like Paytm, designed t
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/wallet-app.git
+   https://github.com/mrsingh-rishi/paytm-wallet.git
    cd paytm-wallet
    npm install
    npm run dev
