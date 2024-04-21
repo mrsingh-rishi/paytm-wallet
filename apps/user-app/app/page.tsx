@@ -10,10 +10,5 @@ export default async function Page() {
   // } else {
   //   redirect("/api/auth/signin");
   // }
-
-  return (
-    <LandingPage
-     
-    />
-  );
+  return <LandingPage />;
 }

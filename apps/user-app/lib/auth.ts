@@ -1,6 +1,7 @@
 import db from "@repo/db/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
+import { SendOTP } from "./actions/sendOTP";
 
 export const authOptions = {
   providers: [
@@ -16,7 +17,9 @@ export const authOptions = {
       },
       // TODO: User credentials type from next-aut
       async authorize(credentials: any) {
+        console.log(credentials);
         // Do zod validation, OTP validation here
+
         const hashedPassword = await bcrypt.hash(credentials.password, 10);
         const existingUser = await db.user.findFirst({
           where: {
@@ -59,7 +62,7 @@ export const authOptions = {
       },
     }),
   ],
-  pages:{
+  pages: {
     signIn: "/auth/signin",
   },
   secret: process.env.JWT_SECRET || "secret",
