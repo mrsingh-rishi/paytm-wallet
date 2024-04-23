@@ -22,7 +22,7 @@ export const SignIn = () => {
   const [otp, setOtp] = useState("");
   async function handleLogin() {
     await signIn("credentials", {
-      number: number,
+      phone: number,
       password: password,
       redirect: true,
       callbackUrl: "/dashboard",
@@ -52,12 +52,12 @@ export const SignIn = () => {
             )}
 
             {showPhoneDiv && (
-              <div className="text-sm font-semibold">
-                <p className="flex items-center">
+              <div className="text-sm font-semibold w-full">
+                <p className="flex items-center text-center">
                   <span className="mr-2">Phone Number:</span>
                   <span className="text-blue-500">{number}</span>
                   {showOtpVerifiedSpan && (
-                    <span className="ml-2 text-green-400">✔</span>
+                    <span className="ml-2 text-green-400"></span>
                   )}
                 </p>
               </div>

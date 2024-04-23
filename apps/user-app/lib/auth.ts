@@ -1,7 +1,6 @@
 import db from "@repo/db/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import { SendOTP } from "./actions/sendOTP";
 
 export const authOptions = {
   providers: [
@@ -26,8 +25,9 @@ export const authOptions = {
             number: credentials.phone,
           },
         });
-
+        console.log("existingUser", existingUser);
         if (existingUser) {
+          console.log("inside if");
           const passwordValidation = await bcrypt.compare(
             credentials.password,
             existingUser.password
@@ -43,6 +43,7 @@ export const authOptions = {
         }
 
         try {
+          console.log("inside try catch creating new user");
           const user = await db.user.create({
             data: {
               number: credentials.phone,
@@ -50,13 +51,15 @@ export const authOptions = {
             },
           });
 
+          console.log(user);
+
           return {
             id: user.id.toString(),
             name: user.name,
             email: user.number,
           };
-        } catch (e) {
-          console.error(e);
+        } catch (e: any) {
+          console.error(e.message);
         }
         return null;
       },
