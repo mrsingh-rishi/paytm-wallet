@@ -34,7 +34,7 @@
     "esbuild": "^0.20.2",
     "express": "^4.19.2",
     "next-auth": "^4.24.7",
-    "recoil": "^0.7.7",
-    "twilio": "^5.0.4"
+    "react-hot-toast": "^2.4.1",
+    "recoil": "^0.7.7"
   }
 }

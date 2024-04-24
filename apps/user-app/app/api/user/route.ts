@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../../lib/auth";
 import bcrypt from "bcrypt";
 import prisma from "@repo/db/client";
-import { useSession } from "next-auth/react";
 export const GET = async () => {
   const session = await getServerSession(authOptions);
   if (session?.user) {
