@@ -2,23 +2,27 @@
 import { Center } from "@repo/ui/center";
 import { TextInput } from "@repo/ui/textinput"; // Assuming you have a TextInput component
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-export const SignIn = () => {
+export const SignUp = () => {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
-  async function handleLogin() {
+
+  async function handleSignUp() {
     try {
       const res = await signIn("credentials", {
+        name: name,
         phone: number,
         password: password,
+        isSignup: true,
         redirect: false,
       });
       if (res?.ok) {
-        toast.success("Sign In Successfully");
+        toast.success("Signed Up Successfully");
         router.push("/dashboard");
       } else {
         toast.error(res?.error || "Something went wrong");
@@ -27,6 +31,7 @@ export const SignIn = () => {
       console.log(error);
     }
   }
+
   return (
     <div className="min-h-screen flex flex-col justify-center items-center">
       <div className="flex-grow"></div>
@@ -36,7 +41,17 @@ export const SignIn = () => {
             <h1 className="text-3xl font-extrabold text-blue-400 text-center mb-4">
               Paytm Wallet
             </h1>
-            <h2 className="text-xl font-semibold text-center mb-4">Log In </h2>
+            <h2 className="text-xl font-semibold text-center mb-4">Sign Up</h2>
+            <div>
+              <TextInput
+                placeholder="Enter your name"
+                onChange={(value: string) => {
+                  setName(value);
+                }}
+                type="text"
+                label={"Name"}
+              />
+            </div>
             <div>
               <TextInput
                 placeholder="Enter your phone number"
@@ -63,18 +78,18 @@ export const SignIn = () => {
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline w-full"
                 type="button"
-                onClick={handleLogin}
+                onClick={handleSignUp}
               >
-                Sign In
+                Sign Up
               </button>
             </div>
             <div className="text-center mt-4">
-              <p>Don't have an account?</p>
+              <p>Already have an account?</p>
               <button
                 className="text-blue-500 hover:underline focus:outline-none"
-                onClick={() => router.push("/auth/signup")}
+                onClick={() => router.push("/auth/signin")}
               >
-                Sign Up
+                Sign In
               </button>
             </div>
           </div>
@@ -84,3 +99,5 @@ export const SignIn = () => {
     </div>
   );
 };
+
+export default SignUp;

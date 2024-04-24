@@ -7,8 +7,5 @@ export default async function () {
   if (!session?.user) {
     redirect("/auth/signin");
   }
-  if (!session?.user?.name) {
-    redirect("/addDetails");
-  }
-  return <div>Dashboard Page</div>;
+  return <div>Good Morning {session?.user.name}</div>;
 }

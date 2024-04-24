@@ -16,7 +16,7 @@ export const authOptions = {
       },
       // TODO: User credentials type from next-aut
       async authorize(credentials: any) {
-        console.log(credentials);
+        // console.log(credentials);
         // Do zod validation, OTP validation here
 
         const hashedPassword = await bcrypt.hash(credentials.password, 10);
@@ -25,9 +25,10 @@ export const authOptions = {
             number: credentials.phone,
           },
         });
-        console.log("existingUser", existingUser);
+        if (existingUser && credentials.isSignup) {
+          throw new Error("User already exists");
+        }
         if (existingUser) {
-          console.log("inside if");
           const passwordValidation = await bcrypt.compare(
             credentials.password,
             existingUser.password
@@ -39,20 +40,28 @@ export const authOptions = {
               email: existingUser.number,
             };
           }
-          return null;
+          throw new Error("Invalid credentials");
         }
 
         try {
-          console.log("inside try catch creating new user");
           const user = await db.user.create({
             data: {
               number: credentials.phone,
               password: hashedPassword,
+              name: credentials.name,
             },
           });
-
-          console.log(user);
-
+          await db.balance.create({
+            data: {
+              user: {
+                connect: {
+                  id: user.id,
+                },
+              },
+              amount: 0,
+              locked: 0,
+            },
+          });
           return {
             id: user.id.toString(),
             name: user.name,
@@ -60,8 +69,8 @@ export const authOptions = {
           };
         } catch (e: any) {
           console.error(e.message);
+          throw e;
         }
-        return null;
       },
     }),
   ],
@@ -73,7 +82,6 @@ export const authOptions = {
     // TODO: can u fix the type here? Using any is bad
     async session({ token, session }: any) {
       session.user.id = token.sub;
-
       return session;
     },
   },
