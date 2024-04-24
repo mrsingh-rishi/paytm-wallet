@@ -1,5 +1,5 @@
 {
-  "name": "Paytm Project",
+  "name": "paytm-project",
   "private": true,
   "scripts": {
     "build": "turbo build",
