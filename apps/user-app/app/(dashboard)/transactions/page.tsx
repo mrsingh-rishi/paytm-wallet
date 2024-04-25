@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 export default async function () {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    redirect("/auth/signin");
+    redirect("/");
   }
   const transactionsRecieved = await getP2PTransactionsRecieved();
   const transactionsSent = await getP2PTransactionsSent();
@@ -32,6 +32,7 @@ async function getP2PTransactionsRecieved() {
     time: t.timestamp,
     amount: t.amount,
     positive: true,
+    
   }));
 }
 

@@ -38,7 +38,7 @@ async function getOnRampTransactions() {
 export default async function () {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    redirect("/auth/signin");
+    redirect("/");
   }
   const balance = await getBalance();
   const transactions = await getOnRampTransactions();
