@@ -1,5 +1,6 @@
 import { Button } from "./button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 interface AppbarProps {
   user?: {
     name?: string | null;
@@ -10,6 +11,7 @@ interface AppbarProps {
 }
 
 export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
+  const router = useRouter();
   return (
     <div className="flex justify-between border-b px-4">
       <div className="text-lg flex flex-col justify-center">
@@ -19,11 +21,22 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
           </h1>
         </Link>
       </div>
-      <div className="flex flex-col justify-center pt-2">
-        <Button onClick={user ? onSignout : onSignin}>
-          {user ? "Logout" : "Login"}
-        </Button>
-      </div>
+      {!user ? (
+        <div className="flex justify-center pt-2">
+          <Button isLogin={true} onClick={user ? onSignout : onSignin}>
+            Login
+          </Button>
+          <Button isLogin={false} onClick={() => router.push("/auth/signup")}>
+            Signup
+          </Button>
+        </div>
+      ) : (
+        <div className="flex justify-center pt-2">
+          <Button isLogin={true} onClick={onSignout}>
+            Logout
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
