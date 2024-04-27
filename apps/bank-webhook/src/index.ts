@@ -2,11 +2,13 @@ import express from "express";
 import dotenv from "dotenv";
 import z from "zod";
 import db from "@repo/db/client";
+import cors from "cors";
 
 dotenv.config();
 
 const server = express();
 server.use(express.json());
+server.use(cors());
 const port = process.env.PORT || 4000;
 interface paymentInformationInterface {
   token: string;
@@ -35,6 +37,17 @@ server.post("/hdfcWebhook", async (req, res) => {
   };
 
   try {
+    const txn = await db.onRampTransaction.findFirst({
+      where: {
+        token: paymentInformation.token,
+        userId: Number(paymentInformation.userId),
+      },
+    });
+    if (!txn) {
+      return res.status(400).json({
+        message: "Wrong Token or UserID",
+      });
+    }
     await db.$transaction([
       db.balance.updateMany({
         where: {

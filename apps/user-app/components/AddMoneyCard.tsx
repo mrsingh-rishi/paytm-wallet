@@ -10,11 +10,11 @@ import { createOnRampTransaction } from "../lib/actions/createOnrampTransaction"
 const SUPPORTED_BANKS = [
   {
     name: "HDFC Bank",
-    redirectUrl: "https://netbanking.hdfcbank.com",
+    redirectUrl: "http://localhost:3002/",
   },
   {
     name: "Axis Bank",
-    redirectUrl: "https://www.axisbank.com/",
+    redirectUrl: "http://localhost:3002/",
   },
 ];
 
@@ -24,12 +24,11 @@ export const AddMoney = () => {
   );
   const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
   const [amount, setAmount] = useState(0);
-
   return (
     <Card title="Add Money">
       <div className="w-full">
         <TextInput
-        type="text"
+          type="text"
           label={"Amount"}
           placeholder={"Amount"}
           onChange={(val) => {
@@ -54,8 +53,10 @@ export const AddMoney = () => {
         <div className="flex justify-center pt-4">
           <Button
             onClick={async () => {
-              await createOnRampTransaction(provider, amount);
-              window.location.href = redirectUrl || "";
+              const { data } = await createOnRampTransaction(provider, amount);
+              window.location.href =
+                `${redirectUrl}?token=${data?.token}&userId=${data?.userId}&amount=${data?.amount}` ||
+                "";
             }}
           >
             Add Money

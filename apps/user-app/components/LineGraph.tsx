@@ -59,11 +59,6 @@ function LineGraph({
         data: debited,
         borderColor: "rgb(255, 0, 0)",
       },
-      //   {
-      //     label: "Credited from Bank",
-      //     data: onRampTransaction,
-      //     borderColor: "rgb(0, 0, 255)",
-      //   },
     ],
   };
 
@@ -86,8 +81,8 @@ function LineGraph({
   };
 
   return (
-    <div className="h-[20vh] w-[80%] m-6 shadow-lg">
-      <div className="bg-gray-100 p-2 rounded-lg">
+    <div className="h-[20vh] w-[90%] m-6 shadow-lg">
+      <div className="bg-blue-100 p-2 rounded-lg">
         <p className="font-bold text-sm text-gray-500">Your Balance is </p>
         <h1 className="text-2xl font-bold text-gray-800">
           <span className="">₹{balance ? Number(balance / 100) : 0}</span>
