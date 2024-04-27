@@ -13,6 +13,9 @@ export default async function () {
   }
   return (
     <div className="w-full">
+      <div className="text-4xl text-blue-400 pt-8 mb-8 font-bold">
+        P2P Transfer
+      </div>
       <SendCard />
     </div>
   );

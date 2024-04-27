@@ -13,7 +13,7 @@ const SendCard = () => {
   const [number, setNumber] = useState("");
 
   return (
-    <div className="h-[90vh]">
+    <div className="h-[70vh]">
       <Center>
         <Card title={"Send"}>
           <div className="min-w-72 pt-2">
