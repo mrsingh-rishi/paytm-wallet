@@ -1,21 +1,42 @@
 // PaymentForm.tsx
 "use client";
 import Navbar from "@/components/Navbar";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import sendOTP from "otp-validation/sendOTP";
+import verifyOTP from "otp-validation/verifyOTP";
+import { ConfirmationResult, getAuth, RecaptchaVerifier } from "firebase/auth";
+import { app } from "otp-validation/config";
+interface formInterface {
+  firstName: string;
+  phoneNumber: string;
+  creditCardNumber: string;
+  cvv: string;
+  expiryDate: string;
+  otp: string;
+}
+
+declare global {
+  interface Window {
+    recaptchVerifier: any;
+  }
+}
 
 const PaymentForm: React.FC = () => {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<formInterface>({
     firstName: "",
     phoneNumber: "",
-    amount: "",
     creditCardNumber: "",
     cvv: "",
     expiryDate: "",
+    otp: "",
   });
+  const auth = getAuth(app);
+  const [confirmations, setConfirmation] = useState<
+    ConfirmationResult | undefined
+  >();
+  const [otpSent, setOtpSent] = useState<Boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,25 +59,32 @@ const PaymentForm: React.FC = () => {
     const userId = urlParams.get("userId");
     const amount = urlParams.get("amount");
 
-    const response = await axios.post("http://localhost:4000/hdfcWebhook", {
-      token: token?.toString(),
-      user_identifier: userId?.toString(),
-      amount: amount?.toString(),
-    });
+    if (confirmations) {
+      const data = await verifyOTP(formData.otp, confirmations);
+      if (data.success) {
+        const response = await axios.post("http://localhost:4000/hdfcWebhook", {
+          token: token?.toString(),
+          user_identifier: userId?.toString(),
+          amount: amount?.toString(),
+        });
 
-    if (response.data.message === "Captured") {
-      toast.success("Transaction Successfull");
-      new Promise((resolve, reject) => {
-        resolve(
-          setTimeout(
-            () => (window.location.href = "http://localhost:3000/transfer"),
-            4000
-          )
-        );
-      });
-    } else {
-      console.log(response);
-      toast.error("Error While Transferring money, Please Try Again Later");
+        if (response.data.message === "Captured") {
+          toast.success("Transaction Successfull");
+          new Promise((resolve, reject) => {
+            resolve(
+              setTimeout(
+                () => (window.location.href = "http://localhost:3000/transfer"),
+                4000
+              )
+            );
+          });
+        } else {
+          console.log(response);
+          toast.error("Error While Transferring money, Please Try Again Later");
+        }
+      } else {
+        toast.error(data.message);
+      }
     }
   };
 
@@ -94,6 +122,46 @@ const PaymentForm: React.FC = () => {
                 onChange={handleChange}
                 className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              {otpSent ? (
+                <input
+                  id="otp"
+                  name="otp"
+                  type="tel"
+                  placeholder="Enter your OTP"
+                  value={formData.otp}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <button
+                  className="text-blue-400 ml-[80%] w-[100px]"
+                  onClick={async () => {
+                    try {
+                      const recaptcha = new RecaptchaVerifier(
+                        auth,
+                        "recaptcha-container",
+                        {
+                          size: "small",
+                          callback: (response: any) => {},
+                          "expired-callback": () => {},
+                        }
+                      );
+                      const data = await sendOTP(
+                        formData.phoneNumber,
+                        recaptcha
+                      );
+                      const { confirmation } = data;
+                      setConfirmation(confirmation);
+                      setOtpSent(true);
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }}
+                >
+                  Send OTP
+                </button>
+              )}
+              <div id="recaptcha-container"></div>
             </div>
             <div className="flex flex-col">
               <label htmlFor="creditCardNumber" className="text-gray-600">

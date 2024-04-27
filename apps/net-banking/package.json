@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
+    "firebase": "^10.11.1",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-hot-toast": "^2.4.1"
+    "react-hot-toast": "^2.4.1",
+    "otp-validation": "*"
   },
   "devDependencies": {
     "@types/node": "^20",
