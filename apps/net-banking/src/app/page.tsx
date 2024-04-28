@@ -7,7 +7,9 @@ import toast from "react-hot-toast";
 import sendOTP from "otp-validation/sendOTP";
 import verifyOTP from "otp-validation/verifyOTP";
 import { ConfirmationResult, getAuth, RecaptchaVerifier } from "firebase/auth";
-import { app } from "otp-validation/config";
+import FirbaseAuth from "otp-validation/config";
+import firebaseConfig from "../../libs/config";
+
 interface formInterface {
   firstName: string;
   phoneNumber: string;
@@ -32,6 +34,8 @@ const PaymentForm: React.FC = () => {
     expiryDate: "",
     otp: "",
   });
+
+  const app = FirbaseAuth(firebaseConfig);
   const auth = getAuth(app);
   const [confirmations, setConfirmation] = useState<
     ConfirmationResult | undefined
@@ -148,7 +152,8 @@ const PaymentForm: React.FC = () => {
                       );
                       const data = await sendOTP(
                         formData.phoneNumber,
-                        recaptcha
+                        recaptcha,
+                        app
                       );
                       const { confirmation } = data;
                       setConfirmation(confirmation);

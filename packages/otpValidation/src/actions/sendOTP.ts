@@ -4,11 +4,11 @@ import {
   getAuth,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import { app } from "../config";
 
 async function sendOTP(
   phone: string,
-  recaptchaVerifier: ApplicationVerifier
+  recaptchaVerifier: ApplicationVerifier,
+  app: any
 ): Promise<{
   success: boolean;
   message: string;
