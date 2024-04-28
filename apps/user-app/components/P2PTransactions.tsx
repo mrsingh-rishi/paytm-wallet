@@ -7,6 +7,7 @@ export const P2PTransactions = ({
     time: Date;
     amount: number;
     positive: boolean;
+    user: any;
   }[];
 }) => {
   if (!transactions.length) {
@@ -20,19 +21,21 @@ export const P2PTransactions = ({
   return (
     <Card title="Recent Transactions">
       {transactions.map((t) => (
-        <div className="flex justify-between">
+        <div className="flex justify-between bg-white px-3 m-3 ">
+          <div className="flex flex-col">
+            <div className="text-[#6a51a6] font-semibold">{t.user.name}</div>
+            <div className="text-slate-600 text-xs">
+              {t.time.toDateString()}
+            </div>
+          </div>
           <div>
             <div className="text-sm">
               {t.positive ? "Received" : "Sent"} INR
             </div>
-            <div className="text-slate-600 text-xs">
-              {t.time.toDateString()}
-            </div>
-            <div
-              className="flex flex-col"
-              style={{ color: t.positive ? "green" : "red" }}
-            >
-              {t.positive ? "+" : "-"} Rs {t.amount / 100}
+            <div className="flex flex-col font-semibold">
+              <span style={{ color: t.positive ? "green" : "red" }}>
+                {t.positive ? "+" : "-"} Rs {t.amount / 100}
+              </span>
             </div>
           </div>
         </div>
